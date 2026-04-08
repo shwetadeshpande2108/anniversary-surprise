@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Journey ❤️</title>
+
+    <style>
+        body {
+            font-family: White;
+            text-align: center;
+            background: #fff0f5;
+        }
+
+        h1 {
+            color: #ff4d6d;
+        }
+
+        #message {
+            font-size: 20px;
+            color: #f7efef;
+            margin: 20px;
+            height: 30px;
+        }
+
+       .slideshow img {
+            max-width: 50%;
+            height: 10%;
+            border-radius: 12px;
+            margin-top: 20px;
+             margin-bottom: 20px;
+        }
+
+        /* Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        body {
+            font-family: white;
+            text-align: center;
+            background: url("images/photobg.jpg") no-repeat center center/cover;
+            backdrop-filter: blur(8px);
+}
+    </style>
+</head>
+
+<body>
+
+<h1>Our Beautiful Journey 💖</h1>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Typing Message -->
+<p id="message"></p>
+
+<!-- Slideshow -->
+<div class="slideshow">
+    <img id="slide" src="images/photo2.jpeg">
+</div>
+
+<!-- Final Popup -->
+<div class="popup" id="lovePopup">
+    <div class="popup-content">
+        <h2>I LOVE YOU ❤️</h2>
+        <p>Happy 5th Anniversary 💕</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+<script>
+// 🎵 Play music again
+window.onload = function() {
+    let isPlaying = localStorage.getItem("musicPlaying");
+
+    if (isPlaying === "true") {
+        document.getElementById("bgMusic").play();
+    }
+
+    typeWriter();
+    startSlideshow();
+}
+
+// 💬 Typing effect
+let text = "From our wedding day to today… every moment with you is magical ❤️";
+let i = 0;
+
+function typeWriter() {
+    if (i < text.length) {
+        document.getElementById("message").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 50);
+    }
+}
+
+// 🎬 Slideshow
+let images = [
+    "images/photo2.jpeg",
+    "images/photo3.jpeg",
+    "images/photo4.jpeg",
+    "images/photo6.jpeg",
+    "images/photo7.jpeg",
+    "images/photo8.jpeg"
+];
+
+let index = 0;
+
+function startSlideshow() {
+    setInterval(() => {
+        let img = document.getElementById("slide");
+
+        // fade out
+        img.style.opacity = 0;
+
+        setTimeout(() => {
+            index++;
+            if (index >= images.length) {
+                index = 0;
+
+                // show popup after full cycle
+                document.getElementById("lovePopup").style.display = "flex";
+            }
+
+            img.src = images[index];
+
+            // fade in
+            img.style.opacity = 1;
+
+        }, 1000);
+
+    }, 3000);
+}
+
+// 💌 Close popup
+function closePopup() {
+    document.getElementById("lovePopup").style.display = "none";
+}
+</script>
+
+</body>
+</html>

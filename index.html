@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Anniversary ❤️</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial;
+        }
+
+        .popup {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #ff4d6d;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="popup">
+    <h1>Happy 5th Anniversary ❤️</h1>
+    <p>To the love of my life 💕</p>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <button onclick="startSurprise()">Click for Surprise 🎁</button>
+</div>
+
+<script>
+function startSurprise() {
+    let audio = document.getElementById("bgMusic");
+
+    audio.play();
+
+    // Save state
+    localStorage.setItem("musicPlaying", "true");
+
+    setTimeout(() => {
+        window.location.href = "gallery.html";
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
