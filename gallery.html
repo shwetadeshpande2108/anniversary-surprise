@@ -3,75 +3,114 @@
 <head>
     <title>Our Journey ❤️</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
+        
         body {
-            font-family: White;
-            text-align: center;
-            background: #fff0f5;
+    margin: 0;
+    text-align: center;
+    font-family: Arial;
+    color: white;
+
+    background-image: url("images/photobg.jpg");
+    background-size: cover;       /* fills full screen */
+    background-position: center;  /* center image */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* smooth scroll */
+}
+
+        body > * {
+            position: relative;
+            z-index: 1;
         }
 
-        h1 {
-            color: #ff4d6d;
+        h1, p {
+            text-shadow: 2px 2px 5px black;
         }
 
-        #message {
-            font-size: 20px;
-            color: #f7efef;
-            margin: 20px;
-            height: 30px;
-        }
-
-       .slideshow img {
-            max-width: 50%;
-            height: 10%;
-            border-radius: 12px;
-            margin-top: 20px;
-             margin-bottom: 20px;
-        }
-
-        /* Popup */
-        .popup {
-            display: none;
+        /* PLAY BUTTON */
+        #musicBtn {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
+            top: 15px;
+            right: 15px;
+            padding: 10px 15px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 10;
         }
 
-        .popup-content {
-            background: white;
-            padding: 30px;
+        /* SLIDESHOW IMAGE (FIXED SIZE) */
+        .slideshow {
+            margin: 30px 0;
+        }
+
+        .slideshow img {
+            width: 80%;
+            max-width: 350px;
+            height: auto;
             border-radius: 12px;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
         }
 
+        /* BUTTON */
         button {
             padding: 10px 20px;
             background: #ff4d6d;
             color: white;
             border: none;
             border-radius: 6px;
-            cursor: pointer;
         }
-        body {
-            font-family: white;
-            text-align: center;
-            background: url("images/photobg.jpg") no-repeat center center/cover;
-            backdrop-filter: blur(8px);
-}
+
+        /* HEART ANIMATION */
         @keyframes floatUp {
-    0% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100vh);
-        opacity: 0;
-    }
-}
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -10px;
+            font-size: 20px;
+            animation: floatUp 5s linear;
+        }
+
+        /* FINAL POPUP */
+        #finalMessage {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #finalMessage div {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+            .slideshow img {
+                max-width: 280px;
+            }
+
+            #musicBtn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
 
@@ -79,49 +118,35 @@
 
 <h1>Our Beautiful Journey 💖</h1>
 
-<!-- MUSIC -->
+<!-- 🎵 MUSIC -->
 <audio id="bgMusic" loop>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Typing Message -->
+<!-- 🎵 PLAY / PAUSE BUTTON -->
+<button onclick="toggleMusic()" id="musicBtn">⏸ Pause</button>
+
 <p id="message"></p>
 
-<!-- Slideshow -->
+<!-- 📸 SLIDESHOW -->
 <div class="slideshow">
     <img id="slide" src="images/photo2.jpeg">
 </div>
 
-<!-- Final Popup -->
-<div class="popup" id="lovePopup">
-    <div class="popup-content">
-        <h2>I LOVE YOU ❤️</h2>
+<h2>Celebrating 5 Beautiful Years Together ❤️</h2>
+
+<!-- 💌 FINAL MESSAGE -->
+<div id="finalMessage">
+    <div>
+        <h1>I LOVE YOU ❤️</h1>
         <p>Happy 5th Anniversary 💕</p>
-        <button onclick="closePopup()">Close</button>
+        <p>These 5 years were the most beautiful part of my life 💖</p>
+        <button onclick="closeMessage()">Close</button>
     </div>
 </div>
+
 <script>
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.innerHTML = "💖";
-    heart.style.position = "fixed";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.top = "100vh";
-    heart.style.fontSize = (20 + Math.random() * 30) + "px";
-    heart.style.animation = "floatUp 5s linear";
-    heart.style.zIndex = "999";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 5000);
-}
-
-setInterval(createHeart, 300);
-</script>
-<script>
-// 🎵 Play music again
+// 🎵 MUSIC AUTO PLAY
 window.onload = function() {
     let isPlaying = localStorage.getItem("musicPlaying");
 
@@ -131,9 +156,23 @@ window.onload = function() {
 
     typeWriter();
     startSlideshow();
+};
+
+// 🎵 PLAY / PAUSE
+function toggleMusic() {
+    let audio = document.getElementById("bgMusic");
+    let btn = document.getElementById("musicBtn");
+
+    if (audio.paused) {
+        audio.play();
+        btn.innerHTML = "⏸ Pause";
+    } else {
+        audio.pause();
+        btn.innerHTML = "▶ Play";
+    }
 }
 
-// 💬 Typing effect
+// 💬 TYPING MESSAGE
 let text = "From our wedding day to today… every moment with you is magical ❤️";
 let i = 0;
 
@@ -145,7 +184,7 @@ function typeWriter() {
     }
 }
 
-// 🎬 Slideshow
+// 🎬 SLIDESHOW
 let images = [
     "images/photo2.jpeg",
     "images/photo3.jpeg",
@@ -164,21 +203,17 @@ function startSlideshow() {
     setInterval(() => {
         let img = document.getElementById("slide");
 
-        // fade out
         img.style.opacity = 0;
 
         setTimeout(() => {
             index++;
+
             if (index >= images.length) {
                 index = 0;
-
-                // show popup after full cycle
-                document.getElementById("lovePopup").style.display = "flex";
+                showFinalMessage();
             }
 
             img.src = images[index];
-
-            // fade in
             img.style.opacity = 1;
 
         }, 1000);
@@ -186,10 +221,44 @@ function startSlideshow() {
     }, 3000);
 }
 
-// 💌 Close popup
-function closePopup() {
-    document.getElementById("lovePopup").style.display = "none";
+// 💌 FINAL MESSAGE
+function showFinalMessage() {
+    document.getElementById("finalMessage").style.display = "flex";
 }
+
+function closeMessage() {
+    document.getElementById("finalMessage").style.display = "none";
+}
+
+// 💖 HEARTS
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.innerHTML = "💖";
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}, 400);
+
+// ✨ SPARKLES
+setInterval(() => {
+    let star = document.createElement("div");
+    star.innerHTML = "✨";
+    star.style.position = "fixed";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+
+    document.body.appendChild(star);
+
+    setTimeout(() => {
+        star.remove();
+    }, 2000);
+}, 600);
+
 </script>
 
 </body>
