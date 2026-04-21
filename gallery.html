@@ -6,30 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        
         body {
-    margin: 0;
-    text-align: center;
-    font-family: Arial;
-    color: white;
+            margin: 0;
+            text-align: center;
+            font-family: Arial;
+            color: white;
 
-    background-image: url("images/photobg.jpg");
-    background-size: cover;       /* fills full screen */
-    background-position: center;  /* center image */
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* smooth scroll */
-}
-
-        body > * {
-            position: relative;
-            z-index: 1;
+            background-image: url("images/photobg.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
         }
 
-        h1, p {
-            text-shadow: 2px 2px 5px black;
+        .container {
+            padding: 40px 20px;
         }
 
-        /* PLAY BUTTON */
+        h1 {
+            text-shadow: 2px 2px 10px black;
+            animation: heartbeat 2s infinite;
+        }
+
+        p {
+            font-size: 18px;
+            text-shadow: 2px 2px 8px black;
+        }
+
+        /* Heartbeat animation */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1); }
+        }
+
+        /* Slideshow */
+        .slideshow img {
+            width: 60%;
+            max-width: 450px;
+            height: auto;
+            border-radius: 15px;
+            margin-top: 30px;
+            transition: opacity 1s ease-in-out;
+            box-shadow: 0 0 25px rgba(0,0,0,0.6);
+        }
+
+        /* Music Button */
         #musicBtn {
             position: fixed;
             top: 15px;
@@ -40,34 +62,9 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            z-index: 10;
         }
 
-        /* SLIDESHOW IMAGE (FIXED SIZE) */
-        .slideshow {
-            margin: 30px 0;
-        }
-
-        .slideshow img {
-            width: 80%;
-            max-width: 350px;
-            height: auto;
-            border-radius: 12px;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
-        }
-
-        /* BUTTON */
-        button {
-            padding: 10px 20px;
-            background: #ff4d6d;
-            color: white;
-            border: none;
-            border-radius: 6px;
-        }
-
-        /* HEART ANIMATION */
+        /* Hearts */
         @keyframes floatUp {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-100vh); opacity: 0; }
@@ -80,7 +77,7 @@
             animation: floatUp 5s linear;
         }
 
-        /* FINAL POPUP */
+        /* Popup */
         #finalMessage {
             display: none;
             position: fixed;
@@ -88,7 +85,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             justify-content: center;
             align-items: center;
         }
@@ -96,19 +93,14 @@
         #finalMessage div {
             background: white;
             color: black;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 12px;
         }
 
-        /* MOBILE */
+        /* Mobile */
         @media (max-width: 600px) {
             .slideshow img {
-                max-width: 280px;
-            }
-
-            #musicBtn {
-                font-size: 12px;
-                padding: 8px 12px;
+                width: 80%;
             }
         }
     </style>
@@ -116,49 +108,46 @@
 
 <body>
 
+<button onclick="toggleMusic()" id="musicBtn">⏸ Pause</button>
+
+<div class="container">
+
 <h1>Our Beautiful Journey 💖</h1>
 
-<!-- 🎵 MUSIC -->
 <audio id="bgMusic" loop>
     <source src="music1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🎵 PLAY / PAUSE BUTTON -->
-<button onclick="toggleMusic()" id="musicBtn">⏸ Pause</button>
-
 <p id="message"></p>
 
-<!-- 📸 SLIDESHOW -->
 <div class="slideshow">
-    <img id="slide" src="images/photo2.jpeg">
+    <img id="slide" src="images/photo1.jpg">
 </div>
 
-<h2>Celebrating 5 Beautiful Years Together ❤️</h2>
+</div>
 
-<!-- 💌 FINAL MESSAGE -->
+<!-- Final Message -->
 <div id="finalMessage">
     <div>
-        <h1>I LOVE YOU ❤️</h1>
+        <h1>To My Forever ❤️</h1>
+        <p>These 5 years were not just time… they were my life 💖</p>
+        <p>You are my happiness, my strength, my home 🏡</p>
+        <p>No matter what happens… I will always choose you ❤️</p>
         <p>Happy 5th Anniversary 💕</p>
-        <p>These 5 years were the most beautiful part of my life 💖</p>
         <button onclick="closeMessage()">Close</button>
     </div>
 </div>
 
 <script>
-// 🎵 MUSIC AUTO PLAY
+// 🎵 MUSIC
 window.onload = function() {
-    let isPlaying = localStorage.getItem("musicPlaying");
-
-    if (isPlaying === "true") {
-        document.getElementById("bgMusic").play();
-    }
-
-    typeWriter();
+    let audio = document.getElementById("bgMusic");
+    audio.volume = 0.3;
+    audio.play().catch(()=>{});
     startSlideshow();
 };
 
-// 🎵 PLAY / PAUSE
+// 🎵 PLAY/PAUSE
 function toggleMusic() {
     let audio = document.getElementById("bgMusic");
     let btn = document.getElementById("musicBtn");
@@ -172,29 +161,18 @@ function toggleMusic() {
     }
 }
 
-// 💬 TYPING MESSAGE
-let text = "From our wedding day to today… every moment with you is magical ❤️";
-let i = 0;
-
-function typeWriter() {
-    if (i < text.length) {
-        document.getElementById("message").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 50);
-    }
-}
-
-// 🎬 SLIDESHOW
-let images = [
-    "images/photo2.jpeg",
-    "images/photo3.jpeg",
-    "images/photo4.jpeg",
-    "images/photo5.jpeg",
-    "images/photo6.jpeg",
-    "images/photo7.jpeg",
-    "images/photo8.jpeg",
-    "images/photo9.jpeg",
-    "images/photo10.jpeg"
+// 💖 STORY SLIDES
+let slides = [
+    { img: "images/photo1.jpg", text: "The day we became one ❤️" },
+    { img: "images/photo2.jpeg", text: "Our Wedding day 😊" },
+    { img: "images/photo3.jpeg", text: "Our journey began with love 💕" },
+    { img: "images/photo4.jpeg", text: "Every moment became special 💖" },
+    { img: "images/photo5.jpeg", text: "Laughing, loving, growing together 😍" },
+    { img: "images/photo6.jpeg", text: "Through every up and down 🤝" },
+    { img: "images/photo7.jpeg", text: "You were always my strength 💪❤️" },
+    { img: "images/photo8.jpeg", text: "Making memories every day 📸" },
+    { img: "images/photo9.jpeg", text: "5 beautiful years of togetherness 💕" },
+    { img: "images/photo10.jpeg", text: "And a lifetime still to go ❤️" }
 ];
 
 let index = 0;
@@ -202,23 +180,25 @@ let index = 0;
 function startSlideshow() {
     setInterval(() => {
         let img = document.getElementById("slide");
+        let text = document.getElementById("message");
 
         img.style.opacity = 0;
 
         setTimeout(() => {
-            index++;
+            index = (index + 1) % slides.length;
 
-            if (index >= images.length) {
-                index = 0;
-                showFinalMessage();
-            }
+            img.src = slides[index].img;
+            text.innerHTML = slides[index].text;
 
-            img.src = images[index];
             img.style.opacity = 1;
+
+            if (index === slides.length - 1) {
+                setTimeout(showFinalMessage, 3000);
+            }
 
         }, 1000);
 
-    }, 3000);
+    }, 4000);
 }
 
 // 💌 FINAL MESSAGE
@@ -239,25 +219,8 @@ setInterval(() => {
 
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 5000);
+    setTimeout(() => heart.remove(), 5000);
 }, 400);
-
-// ✨ SPARKLES
-setInterval(() => {
-    let star = document.createElement("div");
-    star.innerHTML = "✨";
-    star.style.position = "fixed";
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.top = Math.random() * 100 + "vh";
-
-    document.body.appendChild(star);
-
-    setTimeout(() => {
-        star.remove();
-    }, 2000);
-}, 600);
 
 </script>
 
